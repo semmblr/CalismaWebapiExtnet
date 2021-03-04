@@ -1,0 +1,19 @@
+@using CalismaWebapiExtnet.Data
+
+<nav class="sidebar-nav">
+    <ul>
+        @{
+            ViewContext.RouteData.Values.TryGetValue("page", out var currPageObj);
+            var currPage = currPageObj?.ToString();
+
+            foreach (var item in NavData.Items)
+            {
+                var active = currPage == item.Path ? " active" : "";
+
+                var cls = $"sidebar-nav-link{active}";
+
+                <li><a href="@Url.Page(@item.Path)" class="@cls"><i class="x-md">@item.IconCls</i><span>@item.Name</span></a></li>
+            }
+        }
+    </ul>
+</nav>

@@ -1,0 +1,89 @@
+﻿@page  "{handler?}"
+@model CalismaWebapiExtnet.Pages.IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<ext-section target="Main">
+    <ext-container region="Center" scrollable="true" paddingAsString="30 20 30 50">
+        <items>
+            <ext-component html="<h1>Dashboard</h1><p>Check out these resources to help get you started.</p>" />
+            <ext-container layout="HBox" width="668" x-margin="40 0">
+                <layout>
+                    <ext-hboxLayout align="Stretch" />
+                </layout>
+                <items>
+                    <ext-container layout="VBox" flex="1">
+                        <defaults>
+                            <ext-add key="bodyPadding" value="20" mode="Raw" />
+                            <ext-add key="header" value="false" mode="Raw" />
+                            <ext-add key="frame" value="true" mode="Raw" />
+                            <ext-add key="width" value="200" mode="Raw" />
+                            <ext-add key="flex" value="1" mode="Raw" />
+                        </defaults>
+                        <items>
+                            <ext-panel cls="dashboard-panel docs" variant="Light" x-margin="0 20 20 0">
+                                <content>
+                                    <i class="x-md">local_library</i>
+                                    <p>Read the API Docs</p>
+                                    <a class="panel-link" href="https://docs.ext.net" target="_blank" rel="noopener"></a>
+                                </content>
+                            </ext-panel>
+                            <ext-panel cls="dashboard-panel forums" variant="Light" x-margin="0 20 0 0">
+                                <content>
+                                    <i class="x-md">forum</i>
+                                    <p>Community Forums</p>
+                                    <a class="panel-link" href="https://forums.ext.net/" target="_blank" rel="noopener"></a>
+                                </content>
+                            </ext-panel>
+                        </items>
+                    </ext-container>
+                    <ext-container layout="VBox" flex="1">
+                        <defaults>
+                            <ext-add key="bodyPadding" value="20" mode="Raw" />
+                            <ext-add key="header" value="false" mode="Raw" />
+                            <ext-add key="frame" value="true" mode="Raw" />
+                            <ext-add key="width" value="200" mode="Raw" />
+                            <ext-add key="flex" value="1" mode="Raw" />
+                        </defaults>
+                        <items>
+                            <ext-panel cls="dashboard-panel examples" variant="Light" x-margin="0 20 20 0">
+                                <content>
+                                    <i class="x-md">explore</i>
+                                    <p>Examples Explorer</p>
+                                    <a class="panel-link" href="https://examples.ext.net/" target="_blank" rel="noopener"></a>
+                                </content>
+                            </ext-panel>
+                            <ext-panel cls="dashboard-panel themes" variant="Light" x-margin="0 20 0 0">
+                                <content>
+                                    <i class="x-md">style</i>
+                                    <p>Pro Themes</p>
+                                    <a class="panel-link" href="https://themes.ext.net/" target="_blank" rel="noopener"></a>
+                                </content>
+                            </ext-panel>
+                        </items>
+                    </ext-container>
+                    <ext-panel
+                        cls="dashboard-panel action"
+                        header="false"
+                        width="226"
+                        variant="Primary"
+                        fill="true"
+                        bodyPadding="25">
+                        <content>
+                            <i class="x-md">storefront</i>
+                            <p>You can try Ext.NET for free. Commercial use requires the purchase of a license key.</p>
+                            <ext-button
+                                variant="Light"
+                                scale="Medium"
+                                marginAsString="25 0 0 0"
+                                style="width: 100%"
+                                href="https://ext.net/pricing/"
+                                text="Pricing"
+                                />
+                        </content>
+                    </ext-panel>
+                </items>
+            </ext-container>
+        </items>
+    </ext-container>
+</ext-section>

@@ -1,0 +1,636 @@
+﻿@page
+@model CalismaWebapiExtnet.Pages.LayoutModel
+@{
+    string tpl = @"
+
+<tpl if= ""IsHeader"" >
+<i class=""fas fa-people-carry""></i>&nbsp;{ShipperName}<br/>
+<i class=""fas fa-users""></i>  {CustomerName}<br/>
+<i class=""far fa-id-badge""></i>&nbsp;{FirstName}
+</tpl>
+<tpl if= ""IsHeader==false"" >
+<i class=""fas fa-box""></i>&nbsp;{ProductName} ({Quantity} {Unit} x {Price} = {Amount})<br/>
+<i class=""fas fa-user-tie""></i>&nbsp;{SupplierName}
+</tpl>";
+
+
+    //    string tpl1 = @"<tpl>
+    //         <table><tr><td width=""95%"" ><i class=""fas fa-people-carry""></i>&nbsp;{ShipperName} <br/> <i class=""fas fa-phone""></i>&nbsp; {Phone}</td>
+    //    <td width=""5%""><i class=""fas fa-edit""></i> <br/>
+    //           <i class=""fas fa-trash-alt""></i></td></tr></table>
+    //    </tpl>";
+
+    //    string tpl2 = @"<tpl>
+    //            <table><tr><td width=""95%"" style=""white-space:break-spaces""><i class=""fas fa-grip-vertical""></i>&nbsp;{cat_nam} <br/><i class=""fas fa-bars""></i>&nbsp;{cat_dsc}</td>
+    //                 <td width=""5%""><i class=""fas fa-edit""></i> <br/>
+    //           <i class=""fas fa-trash-alt""></i></td></tr></table></tpl>"
+    //;
+
+}
+
+
+<script>
+
+    function filter(type) {
+        App.STORE_CHART.clearFilter();
+        App.STORE_CHART.filterBy(x => x.get('Type') == type);
+    }
+
+    function chartname(toolTip, storeName) {
+        toolTip.setHtml(storeName.get('Name'));
+    }
+
+    function GRD_CAT_rowDblClick(grid, record, element, rowIndex, e, eOpts) {
+        WIN_Open('WIN_CNT_CAT', rowIndex, true);
+    }
+    function GRD_SHP_rowDblClick(grid, record, element, rowIndex, e, eOpts) {
+        WIN_Open('WIN_CNT_SHP', rowIndex, true);
+    }
+    function GRD_PRT_rowDblClick(grid, record, element, rowIndex, e, eOpts) {
+        WIN_Open('WIN_FRM_PARTNERS', rowIndex, true);
+    }
+
+    function WIN_GetContainerId() {
+
+        if (App.WIN_CNT_CAT.isVisible()) {
+            return "WIN_CNT_CAT";
+        }
+        if (App.WIN_CNT_SHP.isVisible()) {
+            return "WIN_CNT_SHP";
+        }
+        if (App.WIN_FRM_PARTNERS.isVisible()) {
+            return "WIN_FRM_PARTNERS";
+        }
+    }
+
+    function SHP_Renderer(value, metaData, record, rowIndex) {
+        if (record.get("EnDis") == true) {
+            var shptrue = '<div class="row">'
+                + '<div class="col-9"> '
+                + '<i class="fas fa-people-carry"></i> &nbsp;' + record.get("ShipperName") + '<br/>'
+                + '<i class="fas fa-phone"></i>&nbsp;' + record.get("Phone") + '<br/>'
+                + ' </div > '
+                + '<div class="col-2"> '
+                + '<button class="btn"><i class="fas fa-edit" id="myicon1" onClick=WIN_Open("WIN_CNT_SHP",' + rowIndex + ',false)> </i></button><br/>'
+                + '<button class="btn" style = "color: red;">'
+                + '<i class="fas fa-trash-alt" id="myicon1" onClick=deleteshipper(' + rowIndex + ')> </i></button><br/>'
+                + '<button class="btn"><i class="fas fa-times" id="myicon1" onClick=Enable_Shipper(' + rowIndex + ')></i></button><br/>'
+                + '</div >'
+                + '</div>';
+            return shptrue;
+        }
+        else {
+            var shp = '<div class="row">'
+                + '<div class="col-9" id="disabled"> '
+                + '<i class="fas fa-people-carry"></i> &nbsp;' + record.get("ShipperName") + '<br/>'
+                + '<i class="fas fa-phone"></i>&nbsp;' + record.get("Phone") + '<br/>'
+                + '</div >'
+                + '<div class="col-2"> '
+                + '<button class="btn" style = "color: red;">'
+                + '<i class="fas fa-trash-alt" id="myicon1" onClick=deleteshipper(' + rowIndex + ')> </i></button><br/>'
+                + '<button class="btn"><i class="far fa-check-circle" id="myicon1" onClick=Enable_Shipper(' + rowIndex + ')></i></button><br/>'
+                + '</div >'
+                + '</div>';
+            return shp;
+        }
+    }
+
+    function CAT_Renderer(value, metaData, record, rowIndex) {
+        if (record.get("EnDis") == true) {
+            var cattrue = '<div class="row">'
+                + '<div class="col-9" style="white-space:break-spaces"> '
+                + '<i class="fas fa-grip-vertical"></i> &nbsp;' + record.get("CategoryName") + '<br/>'
+                + '<i class="fas fa-bars"></i>&nbsp;' + record.get("Description") + '<br/>'
+                + ' </div > '
+                + '<div class="col-2"> '
+                + '<button class="btn"><i class="fas fa-edit" id="myicon1" onClick=WIN_Open("WIN_CNT_CAT",' + rowIndex + ',false)> </i></button><br/>'
+                + '<button class="btn" style = "color: red;">'
+                + '<i class="fas fa-trash-alt" id="myicon1" onClick=deletecategory(' + rowIndex + ')> </i></button><br/>'
+                + '<button class="btn"><i class="fas fa-times" id="myicon1" onClick=Enable_Category(' + rowIndex + ')></i></button><br/>'
+                + '</div >'
+                + '</div>';
+            return cattrue;
+        }
+        else {
+            var cat = '<div class="row">'
+                + '<div class="col-9" style="white-space:break-spaces" id="disabled"> '
+                + '<i class="fas fa-grip-vertical"></i> &nbsp;' + record.get("CategoryName") + '<br/>'
+                + '<i class="fas fa-bars"></i>&nbsp;' + record.get("Description") + '<br/>'
+                + '</div >'
+                + '<div class="col-2"> '
+                + '<button class="btn" style = "color: red;">'
+                + '<i class="fas fa-trash-alt" id="myicon1" onClick=deletecategory(' + rowIndex + ')> </i></button><br/>'
+                + '<button class="btn"><i class="far fa-check-circle" id="myicon1" onClick=Enable_Category(' + rowIndex + ')></i></button><br/>'
+                + '</div >'
+                + '</div>';
+            return cat;
+        }
+    }
+
+    var template1 = '<i class="fas fa-users"></i>';
+    var template2 = '<i class="fas fa-truck"></i>';
+    function type(value) {
+
+        if (value == "C") {
+            return Ext.String.format(template1, value);
+        }
+        return Ext.String.format(template2, value);
+    }
+
+    function Partner_Renderer(value, metaData, record, rowIndex) {
+        if (record.get("EnDis") == true) {
+            var partnertrue = '<div class="row">'
+                + '<div class="col-9" style="white-space:break-spaces"> '
+                + type(record.get("Type")) + record.get("Name") + '<br/>'
+                //+ '<i class="far fa-star"></i>'
+                //+ '<i class="fas fa-signature"></i>&nbsp;' + record.get("Name") + '<br/>'
+                + '<i class="fas fa-bars"></i>&nbsp;' + record.get("PostalCode") + '<br/>'
+                + '<i class="fas fa-map-marker-alt"></i>&nbsp;' + record.get("Address") + '<br/>'
+                + '<i class="fas fa-city"></i>&nbsp;' + record.get("City") + '<br/>'
+                + '<i class="fas fa-id-card-alt"></i>&nbsp;' + record.get("ContactName") + '<br/>'
+                + '<i class="fas fa-globe-europe"></i>&nbsp;' + record.get("Country") + '<br/>'
+                + ' </div > '
+                + '<div class="col-2"> '
+                + '<button type="button" class="btn"><i class="fas fa-edit" id="myicon1" onClick=WIN_Open("WIN_FRM_PARTNERS",' + rowIndex + ',false)> </i></button><br/>'
+                + '<button type="button" class="btn" style = "color: red;">'
+                + '<i class="fas fa-trash-alt" id="myicon1" onClick=deletepartners(' + rowIndex + ')> </i></button><br/>'
+                + '<button class="btn"><i class="fas fa-times" id="myicon1" onClick=Enable_Partner(' + rowIndex + ')></i></button><br/>'
+                + '</div >'
+                + '</div>';
+            return partnertrue;
+        }
+        else {
+            var partner = '<div class="row">'
+                + '<div class="col-9" style="white-space:break-spaces" id="disabled"> '
+                + type(record.get("Type")) + record.get("Name") + '<br/>'
+                //+ '<i class="far fa-star"></i>'
+                //+ '<i class="fas fa-signature"></i>&nbsp;' + record.get("Name") + '<br/>'
+                + '<i class="fas fa-bars"></i>&nbsp;' + record.get("PostalCode") + '<br/>'
+                + '<i class="fas fa-map-marker-alt"></i>&nbsp;' + record.get("Address") + '<br/>'
+                + '<i class="fas fa-city"></i>&nbsp;' + record.get("City") + '<br/>'
+                + '<i class="fas fa-id-card-alt"></i>&nbsp;' + record.get("ContactName") + '<br/>'
+                + '<i class="fas fa-globe-europe"></i>&nbsp;' + record.get("Country") + '<br/>'
+                + ' </div > '
+                + '<div class="col-2"> '
+                + '<button class="btn" style = "color: red;">'
+                + '<i class="fas fa-trash-alt" id="myicon1" onClick=deletepartners(' + rowIndex + ')> </i></button><br/>'
+                + '<button class="btn"><i class="far fa-check-circle" id="myicon1" onClick=Enable_Partner(' + rowIndex + ')></i></button><br/>'
+                + '</div >'
+                + '</div>';
+            return partner;
+        }
+    }
+
+    //function updatecategory(rowIndex) {
+
+    //    var record = App.GRD_CAT.getStore().data.getAt(rowIndex);
+
+    //    var id = record.get("CategoryID")
+    //    var name = App.WIN_CNT_CAT_NAME.getValue();
+    //    var desc = App.WIN_CNT_CAT_DESC.getValue();
+
+
+    //    //var obj;
+    //    //        obj = {
+    //    //            CategoryName: App.WIN_CNT_CAT_NAME.getValue(),
+    //    //            Description: App.WIN_CNT_CAT_DESC.getValue(),
+    //    //        };
+
+    //    App.direct.Edit(id, name, desc);
+
+    //    //return JSON.stringify(obj);
+
+    //}
+
+    function deletecategory(rowIndex) {
+        var record = App.GRD_CAT.getStore().data.getAt(rowIndex);
+        var id = record.get("CategoryID")
+        App.direct.CategoryDelete(id);
+        App.GRD_CAT.getStore().data.removeAt(rowIndex);
+    }
+    function deleteshipper(rowIndex) {
+        var record = App.GRD_SHP.getStore().data.getAt(rowIndex);
+        var id = record.get("ShipperID")
+        App.GRD_SHP.getStore().data.removeAt(rowIndex);
+        App.direct.ShipperDelete(id);
+    }
+    function deletepartners(rowIndex) {
+        debugger;
+        var record = App.GRD_PRT.getStore().data.getAt(rowIndex);
+        var type = record.get("Type");
+        if (type == 'C') {
+            var id = record.get("ID");
+            App.GRD_PRT.getStore().data.removeAt(rowIndex);
+            App.direct.PartnerDelete(id, type);
+        }
+        else {
+            var id = record.get("ID");
+            App.GRD_PRT.getStore().data.removeAt(rowIndex);
+            App.direct.PartnerDelete(id, type);
+        }
+    }
+
+    function Enable_Shipper(rowIndex) {
+        debugger;
+        var record = App.GRD_SHP.getStore().data.getAt(rowIndex);
+        var enable = record.get("EnDis");
+        var id = record.get("ShipperID");
+        App.direct.ShipperEnable(enable, id);
+    }
+    function Enable_Category(rowIndex) {
+        debugger;
+        var record = App.GRD_CAT.getStore().data.getAt(rowIndex);
+        var enable = record.get("EnDis");
+        var id = record.get("CategoryID");
+        App.direct.CategoryEnable(enable, id);
+    }
+    function Enable_Partner(rowIndex) {
+        debugger;
+        var record = App.GRD_PRT.getStore().data.getAt(rowIndex);
+        var type = record.get("Type");
+        if (type == 'C') {
+
+            var enable = record.get("EnDis");
+            var id = record.get("ID");
+            App.direct.PartnerEnable(enable, id, type);
+        }
+        else {
+
+            var enable = record.get("EnDis");
+            var ID = record.get("ID");
+            App.direct.PartnerEnable(enable, ID ,type);
+        }
+    }
+
+
+    function WIN_Open(containerId, record_index, onlyDisplay) {
+        debugger;
+        App.WIN_MODE.setValue((record_index ? (onlyDisplay ? "D" : "E") : "N"));
+        App.WIN_CNT_CAT.setVisible(containerId === 'WIN_CNT_CAT');
+        App.WIN_CNT_SHP.setVisible(containerId === 'WIN_CNT_SHP');
+        App.WIN_FRM_PARTNERS.setVisible(containerId === 'WIN_FRM_PARTNERS');
+        App.WIN_BTN_SAVE.setDisabled(onlyDisplay);
+
+        var record = null;
+        switch (containerId) {
+
+            case "WIN_CNT_CAT":
+                if (record_index != undefined)
+                    record = App.GRD_CAT.getStore().data.getAt(record_index);
+
+                App.WIN_CNT_CAT_ID.setValue(record ? record.get("CategoryID") : null);
+                App.WIN_CNT_CAT_NAME.setValue(record ? record.get("CategoryName") : null);
+                App.WIN_CNT_CAT_DESC.setValue(record ? record.get("Description") : null);
+
+                App.WIN_CNT_CAT_ID.setReadOnly(onlyDisplay);
+                App.WIN_CNT_CAT_NAME.setReadOnly(onlyDisplay);
+                App.WIN_CNT_CAT_DESC.setReadOnly(onlyDisplay);
+                break;
+
+            case "WIN_CNT_SHP":
+                if (record_index != undefined)
+                    record = App.GRD_SHP.getStore().data.getAt(record_index);
+
+                App.WIN_CNT_SHP_ID.setValue(record ? record.get("ShipperID") : null);
+                App.WIN_CNT_SHP_NAME.setValue(record ? record.get("ShipperName") : null);
+                App.WIN_CNT_SHP_PHONE.setValue(record ? record.get("Phone") : null);
+
+                App.WIN_CNT_SHP_ID.setReadOnly(onlyDisplay);
+                App.WIN_CNT_SHP_NAME.setReadOnly(onlyDisplay);
+                App.WIN_CNT_SHP_PHONE.setReadOnly(onlyDisplay);
+                break;
+            case "WIN_FRM_PARTNERS":
+                if (record_index != undefined)
+                    record = App.GRD_PRT.getStore().data.getAt(record_index);
+
+                App.SELECT_TYPE.setValue(record ? record.get("Type") : null)
+                App.PARTNER_ID.setValue(record ? record.get("ID") : null);
+                App.PARTNER_NAME.setValue(record ? record.get("Name") : null);
+                App.PARTNER_ADDRESS.setValue(record ? record.get("Address") : null);
+                App.PARTNER_CITY.setValue(record ? record.get("City") : null);
+                App.PARTNER_CONTACT_NAME.setValue(record ? record.get("ContactName") : null);
+                App.PARTNER_COUNTRY.setValue(record ? record.get("Country") : null);
+                App.PARTNER_POSTALCODE.setValue(record ? record.get("PostalCode") : null);
+
+                App.SELECT_TYPE.setReadOnly(onlyDisplay);
+                App.PARTNER_NAME.setReadOnly(onlyDisplay);
+                App.PARTNER_ADDRESS.setReadOnly(onlyDisplay);
+                App.PARTNER_CITY.setReadOnly(onlyDisplay);
+                App.PARTNER_CONTACT_NAME.setReadOnly(onlyDisplay);
+                App.PARTNER_COUNTRY.setReadOnly(onlyDisplay);
+                App.PARTNER_POSTALCODE.setReadOnly(onlyDisplay);
+
+                break;
+        }
+
+        //if (mode == 'D') {
+
+        //    App.btnLogincat.setDisabled(true);
+
+        //}
+        //else {
+
+        //    App.btnLogincat.setDisabled(false);
+        //}
+
+        App.WIN.show();
+    }
+
+    function WIN_GetData() {
+        debugger;
+        var obj;
+        switch (WIN_GetContainerId()) {
+            case "WIN_CNT_CAT":
+                obj = {
+                    CategoryID: App.WIN_CNT_CAT_ID.getValue(),
+                    CategoryName: App.WIN_CNT_CAT_NAME.getValue(),
+                    Description: App.WIN_CNT_CAT_DESC.getValue()
+                };
+                break;
+            case "WIN_CNT_SHP":
+                obj = {
+                    ShipperID: App.WIN_CNT_SHP_ID.getValue(),
+                    ShipperName: App.WIN_CNT_SHP_NAME.getValue(),
+                    Phone: App.WIN_CNT_SHP_PHONE.getValue()
+                };
+                break;
+            case "WIN_FRM_PARTNERS":
+                obj = {
+                    ID: App.PARTNER_ID.getValue(),
+                    Name: App.PARTNER_NAME.getValue(),
+                    Address: App.PARTNER_ADDRESS.getValue(),
+                    Country: App.PARTNER_CITY.getValue(),
+                    ContactName: App.PARTNER_CONTACT_NAME.getValue(),
+                    City: App.PARTNER_COUNTRY.getValue(),
+                    PostalCode: App.PARTNER_POSTALCODE.getValue()
+                };
+                break;
+
+            default:
+        }
+        return JSON.stringify(obj);
+    }
+
+</script>
+
+<ext-store data="Model.Chart_Data_Model" storeId="STORE_CHART">
+    <fields>
+        <ext-stringDataField name="Type" />
+        <ext-stringDataField name="Name" />
+        <ext-numberDataField name="OrderCount" />
+    </fields>
+</ext-store>
+<ext-section target="Main">
+    <ext-container region="Center">
+        <layout>
+            <ext-hboxLayout align="Stretch" />
+        </layout>
+        <defaults>
+            <ext-add key="margin" value="10" mode="Raw" />
+        </defaults>
+        <items>
+            <ext-container flex="1">
+                <layout>
+                    <ext-vboxLayout align="Stretch" />
+                </layout>
+                <items>
+                    <ext-gridPanel id="GRD_CAT" title="Categories" Cls="mygrid1" frame="true" fixed="true" flex="1" minWidth="100">
+                        <store>
+                            <ext-store id="GRD_CAT_STORE" data="Model.Categories_Model">
+                                <fields>
+                                    <ext-stringDataField name="CategoryName" />
+                                    <ext-stringDataField name="Description" />
+                                    <ext-numberDataField name="CategoryID" />
+                                    <ext-booleanDataField name="EnDis" />
+
+                                </fields>
+                            </ext-store>
+                        </store>
+                        <columns>
+                            <ext-column flex="1" renderer="CAT_Renderer" />
+                        </columns>
+                        <listeners>
+                            <rowDblClick fn="GRD_CAT_rowDblClick" />
+                        </listeners>
+                        <tbar>
+                            <ext-toolbar>
+                                <items>
+                                    <ext-button id="Button1" text="Add">
+                                        <listeners>
+                                            <click handler="WIN_Open('WIN_CNT_CAT')" />
+                                        </listeners>
+                                    </ext-button>
+                                </items>
+                            </ext-toolbar>
+                        </tbar>
+                    </ext-gridPanel>
+                    <ext-gridPanel id="GRD_SHP" title="Shipper" componentCls="mygrid1" frame="true" flex="1"
+                                   marginAsString="20 0 0 0" fixed="true" columnWidth="0.5" minWidth="100">
+                        <store>
+                            <ext-store id="GRD_SHP_STORE" data="Model.Shippers_Model">
+                                <fields>
+                                    <ext-stringDataField name="ShipperName" />
+                                    <ext-stringDataField name="Phone" />
+                                    <ext-numberDataField name="ShipperID" />
+                                    <ext-booleanDataField name="EnDis" />
+                                </fields>
+                            </ext-store>
+                        </store>
+
+                        <columns>
+                            <ext-column flex="1" renderer="SHP_Renderer" />
+                            @*<ext-templateColumn flex="1" tpl="@tpl1"></ext-templateColumn>*@
+                            @*<ext-column text="Phone" dataIndex="Phone" flex="1" renderer="SHIP_PHONE"/>*@
+
+                        </columns>
+                        <listeners>
+                            <rowDblClick fn="GRD_SHP_rowDblClick" />
+                        </listeners>
+
+                        <tbar>
+                            <ext-toolbar>
+                                <items>
+                                    <ext-button id="BTN_SHP_ADD" text="Add">
+                                        <listeners>
+                                            <click handler="WIN_Open('WIN_CNT_SHP')" />
+                                        </listeners>
+                                    </ext-button>
+                                </items>
+                            </ext-toolbar>
+                        </tbar>
+                    </ext-gridPanel>
+                </items>
+            </ext-container>
+
+            <ext-container frame="true" flex="2" title="Panel 2">
+                <layout>
+                    <ext-vboxLayout align="Stretch" />
+                </layout>
+                <items>
+                    <ext-treePanel id="TREEPANEL" componentCls="mygrid1" width="480" height="600" frame="true"
+                                   title="Tree" scrollable="true" flex="1" root="Model.TreeNode1" rootVisible="false">
+                        <columns>
+                            <ext-treeColumn text="Orders" minWidth="200" dataIndex="text" />
+                            <ext-templateColumn flex="1" minWidth="450" tpl="@tpl"></ext-templateColumn>
+                        </columns>
+                    </ext-treePanel>
+
+                    <ext-container flex="1" marginAsString="20 0 0 0">
+                        <layout>
+                            <ext-vboxLayout align="Stretch" />
+                        </layout>
+                        <items>
+                            <ext-cartesianChart flex="1" store="STORE_CHART" id="ID_CHART" componentCls="mygrid1">
+                                <axes>
+                                    <ext-numericAxis position="Left" fields="OrderCount" grid="true" margin="5" />
+                                    <ext-categoryAxis position="Bottom" fields="Name" />
+                                </axes>
+                                <series>
+                                    <ext-barSeries highlight="true" xField="Name" yField="OrderCount">
+                                        <tooltip>
+                                            <ext-seriesTooltip trackMouse="true" renderer="chartname" />
+                                        </tooltip>
+                                    </ext-barSeries>
+                                </series>
+                            </ext-cartesianChart>
+
+                            <!--butonlar-->
+                            <ext-container>
+                                <layout>
+                                    <ext-vboxLayout align="Middle" />
+                                </layout>
+                                <items>
+                                    <ext-segmentedButton maxWidth="500" componentCls="mybuton">
+                                        <items>
+                                            <ext-button flex="1" text="Customer" id="BTN_CUST">
+                                                <listeners>
+                                                    <click handler="filter('C');App.ID_CHART.setTitle('Customers');" />
+                                                </listeners>
+                                            </ext-button>
+                                            <ext-button flex="1" text="Shipper" id="BTN_SHP">
+                                                <listeners>
+                                                    <click handler="filter('S');App.ID_CHART.setTitle('Shippers');" />
+                                                </listeners>
+                                            </ext-button>
+                                            <ext-button flex="1" text="Employee" id="BTN_EMP">
+                                                <listeners>
+                                                    <click handler="filter('E');App.ID_CHART.setTitle('Employees');" />
+                                                </listeners>
+                                            </ext-button>
+                                        </items>
+                                    </ext-segmentedButton>
+                                </items>
+                            </ext-container>
+                        </items>
+                    </ext-container>
+                </items>
+            </ext-container>
+
+            <ext-gridPanel id="GRD_PRT" title="Partners" componentCls="mygrid1" flex="1" frame="true">
+                <store>
+                    <ext-store data="Model.Partners_Model">
+                        <fields>
+                            <ext-stringDataField name="Type" />
+                            <ext-stringDataField name="Name" />
+                            <ext-stringDataField name="PostalCode" />
+                            <ext-stringDataField name="Address" />
+                            <ext-stringDataField name="City" />
+                            <ext-stringDataField name="ContactName" />
+                            <ext-stringDataField name="Country" />
+                            <ext-booleanDataField name="EnDis" />
+                            <ext-numberDataField name="ID" />
+
+
+                        </fields>
+                    </ext-store>
+                </store>
+                <columns>
+                    <ext-column flex="1" renderer="Partner_Renderer" />
+                </columns>
+                <listeners>
+                    <rowDblClick fn="GRD_PRT_rowDblClick" />
+                </listeners>
+                <tbar>
+                    <ext-toolbar>
+                        <items>
+                            <ext-button id="BTN_PARTNERS" text="Add">
+                                <listeners>
+                                    <click handler="WIN_Open('WIN_FRM_PARTNERS')" />
+                                </listeners>
+                            </ext-button>
+                        </items>
+                    </ext-toolbar>
+                </tbar>
+
+            </ext-gridPanel>
+        </items>
+    </ext-container>
+
+    <ext-window id="WIN" title="Windows" width="360" modal="true" bodyPadding="18" layout="Fit">
+        <items>
+            <ext-hidden id="WIN_MODE"></ext-hidden>
+            <ext-container id="WIN_CNT_CAT">
+                <layout><ext-vboxLayout align="Stretch" /></layout>
+                <items>
+                    <ext-textField id="WIN_CNT_CAT_ID" fieldLabel="Category ID" labelAlign="Top" allowBlank="false" />
+                    <ext-textField id="WIN_CNT_CAT_NAME" fieldLabel="Category Name" labelAlign="Top" allowBlank="false" />
+                    <ext-textField id="WIN_CNT_CAT_DESC" fieldLabel="Category Description" labelAlign="Top" allowBlank="false" />
+                    <ext-hidden id="WIN_CNT_CAT_ENDS" fieldLabel="Category EnDis" labelAlign="Top" />
+                </items>
+            </ext-container>
+
+            <ext-container id="WIN_CNT_SHP">
+                <layout><ext-vboxLayout align="Stretch" /></layout>
+                <items>
+                    <ext-textField id="WIN_CNT_SHP_ID" fieldLabel="Shipper ID" labelAlign="Top" allowBlank="false"/>
+                    <ext-textField id="WIN_CNT_SHP_NAME" fieldLabel="Shipper Name" labelAlign="Top" allowBlank="false" />
+                    <ext-textField id="WIN_CNT_SHP_PHONE" fieldLabel="Shipper Phone" inputMask="(000) 000-0000" labelAlign="Top" allowBlank="false" />
+                    <ext-hidden id="WIN_CNT_SHP_ENDS" fieldLabel="Shipper EnDis" labelAlign="Top" allowBlank="false" />
+
+                </items>
+            </ext-container>
+
+            <ext-formPanel id="WIN_FRM_PARTNERS">
+                <items>
+                    <ext-comboBox id="SELECT_TYPE" name="add_partner.Type" fieldLabel="Select">
+                        <items>
+                            <ext-listItem text="Customer" value=@("C") />
+                            <ext-listItem text="Supplier" value=@("S") />
+                        </items>
+                    </ext-comboBox>
+                    <ext-textField id="PARTNER_ID" name="add_partner.ID" fieldLabel="ID" flex="1" />
+                    <ext-textField id="PARTNER_NAME" name="add_partner.Name" fieldLabel="Name" flex="1" />
+                    <ext-textField id="PARTNER_ADDRESS" name="add_partner.Address" fieldLabel="Address" flex="1" />
+                    <ext-textField id="PARTNER_CITY" name="add_partner.City" fieldLabel="City" flex="1" />
+                    <ext-textField id="PARTNER_CONTACT_NAME" name="add_partner.ContactName" fieldLabel="Contact Name" flex="1" />
+                    <ext-textField id="PARTNER_COUNTRY" name="add_partner.Country" fieldLabel="Country" flex="1" />
+                    <ext-textField id="PARTNER_POSTALCODE" name="add_partner.PostalCode" fieldLabel="PostalCode" flex="1" />
+                    <ext-hidden id="PARTNER_ENDIS" name="add_partner.EnDis" fieldLabel="EnDis" flex="1" />
+                </items>
+            </ext-formPanel>
+        </items>
+        <buttons>
+            <ext-button id="WIN_BTN_SAVE" text="Save">
+                <directEvents>
+                    <click pageHandler="Save" method="POST" type="Submit">
+                        <extraParams>
+                            <ext-add key="Mode" value="App.WIN_MODE.getValue()" mode="Raw" />
+                            <ext-add key="Data" value="WIN_GetData()" mode="Raw" />
+                            <ext-add key="DataType" value="WIN_GetContainerId()" mode="Raw" />
+                            <ext-add key="IsCustomer" value="App.SELECT_TYPE.getValue() === 'C'" mode="Raw" />
+                        </extraParams>
+                    </click>
+                </directEvents>
+                <listeners>
+                    <click handler="App.WIN.close()" />
+                </listeners>
+            </ext-button>
+        </buttons>
+    </ext-window>
+</ext-section>
+
+<script>
+    Ext.onReady(() => {
+        App.BTN_CUST.click();
+    });
+</script>

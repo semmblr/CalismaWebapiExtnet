@@ -1,0 +1,35 @@
+﻿@page  "{handler?}"
+@model CalismaWebapiExtnet.Pages.GridPanelModel
+@{
+    ViewData["Title"] = "GridPanel";
+}
+<ext-section target="Main">
+    <ext-container region="Center" scrollable="true" paddingAsString="30 20 30 50">
+        <items>
+            <ext-gridPanel
+                title="GridPanel"
+                width="960"
+                height="640"
+                frame="true">
+                <store>
+                    <ext-store data="Model.GridData">
+                        <fields>
+                            <ext-dataField name="company" />
+                            <ext-numberDataField name="price" />
+                            <ext-numberDataField name="change" />
+                            <ext-numberDataField name="pctChange" />
+                            <ext-dateDataField name="lastChange" dateFormat="yyyy-MM-dd hh:mm:tt" />
+                        </fields>
+                    </ext-store>
+                </store>
+                <columns>
+                    <ext-column text="Company" dataIndex="company" flex="1" />
+                    <ext-column text="Price" dataIndex="price" renderer="Ext.util.Format.usMoney" />
+                    <ext-column text="Change" dataIndex="change" renderer="change" />
+                    <ext-column text="Change %" dataIndex="pctChange" renderer="pctChange" />
+                    <ext-dateColumn text="Last Updated" dataIndex="lastChange" width="150" format="yyyy-MM-dd" />
+                </columns>
+            </ext-gridPanel>
+        </items>
+    </ext-container>
+</ext-section>

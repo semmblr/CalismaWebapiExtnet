@@ -1,0 +1,257 @@
+/* Spotless theme color palette.
+   Update, if you're using another theme */
+:root {
+    --gray-100: #f4f4f9;
+    --gray-200: #ededf4;
+    --gray-300: #e2e2e8;
+    --gray-400: #c0c0cc;
+    --gray-500: #7e7e8c;
+    --gray-600: #525260;
+    --gray-700: #434351;
+    --gray-800: #2d2d3a;
+    --gray-900: #1f1f26;
+    --primary-100: #e8f3ff;
+    --primary-200: #badbff;
+    --primary-300: #75b8ff;
+    --primary-400: #36a0ff;
+    --primary-500: #1989ff;
+    --primary-600: #007ff2;
+    --primary-700: #005dcc;
+    --primary-800: #0958b7;
+    --primary-900: #00519b;
+    --success-100: #e9f8f4;
+    --success-200: #bdeae0;
+    --success-300: #7cd6c1;
+    --success-400: #50c8ac;
+    --success-500: #24ba97;
+    --success-600: #14af87;
+    --success-700: #00a576;
+    --success-800: #00895f;
+    --success-900: #006342;
+    --danger-100: #ffebeb;
+    --danger-200: #ffc7c7;
+    --danger-300: #ff9f9f;
+    --danger-400: #fd7777;
+    --danger-500: #fc5656;
+    --danger-600: #f73e3e;
+    --danger-700: #f91c1c;
+    --danger-800: #d60909;
+    --danger-900: #ad0707;
+    --warning-100: #fff9e6;
+    --warning-200: #ffecb4;
+    --warning-300: #ffda6a;
+    --warning-400: #ffcd39;
+    --warning-500: #ffc107;
+    --warning-600: #e8a707;
+    --warning-700: #d19000;
+    --warning-800: #935f03;
+    --warning-900: #633d00;
+    --info-100: #e8f3ff;
+    --info-200: #badbff;
+    --info-300: #75b8ff;
+    --info-400: #36a0ff;
+    --info-500: #1989ff;
+    --info-600: #007ff2;
+    --info-700: #005dcc;
+    --info-800: #0958b7;
+    --info-900: #00519b;
+}
+
+/* Layout */
+
+.navbar {
+    background-color: #fff;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.app-logo {
+    color: var(--gray-900);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 24px;
+}
+
+.sidebar {
+    background-color: #fff;
+    border-right: 1px solid var(--gray-200);
+}
+
+.sidebar-nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav-link {
+    margin-bottom: 6px;
+    padding: 0 12px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    color: var(--gray-900);
+    font-weight: 600;
+    line-height: 48px;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.15s ease-out;
+}
+
+    .sidebar-nav-link:hover:not(.active) {
+        background-color: var(--gray-100);
+        padding-left: 14px;
+    }
+
+    .sidebar-nav-link.active {
+        color: var(--primary-900);
+        background-color: var(--primary-100);
+    }
+
+    .sidebar-nav-link i {
+        margin-right: 8px;
+        font-size: 24px;
+    }
+
+.sidebar-footer a {
+    display: block;
+    color: var(--gray-900);
+    text-align: center;
+    text-decoration: none;
+}
+
+    .sidebar-footer a:hover {
+        color: var(--primary-500);
+    }
+
+/* Dashboard page */
+
+.dashboard-panel {
+    position: relative;
+    text-align: center;
+}
+
+    .dashboard-panel .panel-link {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 1px solid transparent;
+        border-radius: 6px;
+        transition: all 0.15s ease-out;
+    }
+
+        .dashboard-panel .panel-link:hover {
+            border-color: var(--primary-500);
+        }
+
+    .dashboard-panel p {
+        margin: 0;
+    }
+
+    .dashboard-panel i {
+        font-size: 48px;
+    }
+
+    .dashboard-panel.docs i {
+        color: var(--primary-500);
+    }
+
+    .dashboard-panel.examples i {
+        color: var(--gray-900);
+    }
+
+    .dashboard-panel.forums i {
+        color: var(--success-500);
+    }
+
+    .dashboard-panel.themes i {
+        color: var(--warning-500);
+    }
+
+    .dashboard-panel.action i {
+        color: var(--primary-200);
+        font-size: 52px;
+    }
+
+/* ******************************** */
+/* Headings                         */
+/* ******************************** */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    color: var(--gray-900);
+}
+
+h1 {
+    font-size: 40px;
+    line-height: 1.3;
+    margin-bottom: 24px;
+}
+
+
+
+
+.mygrid1 {
+}
+
+    .mygrid1 .x-panel-header {
+        background-color: crimson;
+        border-color: crimson;
+    }
+
+    .mygrid1 .x-title-text {
+        color: white !important;
+    }
+
+.mybuton {
+}
+
+    .mybuton.x-segmented-button {
+    }
+
+        .mybuton.x-segmented-button .x-btn {
+            color: darkslategray;
+            font-weight: normal;
+            background-color: cornsilk;
+            border-color: crimson;
+        }
+
+        .mybuton.x-segmented-button .x-btn-button .x-btn-inner {
+            color: darkslategray;
+            font-weight: normal;
+        }
+
+        .mybuton.x-segmented-button .x-btn.x-btn-pressed {
+            background-color: crimson;
+            border-color: crimson;
+        }
+
+            .mybuton.x-segmented-button .x-btn.x-btn-pressed .x-btn-button .x-btn-inner {
+                color: white;
+                font-weight: bold;
+            }
+
+
+
+.myicon.x-tree-view .x-grid-cell-treecolumn .x-tree-elbow-img.x-grid-tree-node-expanded.x-tree-elbow-end-plus.x-grid-tree-node-expanded.x-tree-elbow-plus {
+    background-color: crimson;
+}
+
+#myicon1::before {
+    display: none;
+}
+
+.mygrid1 .x-grid-row:hover #myicon1::before {
+    display: block;
+}
+
+#disabled{
+    text-decoration-line:line-through;
+    color:gray;
+   
+}

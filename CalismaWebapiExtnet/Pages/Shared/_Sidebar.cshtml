@@ -1,0 +1,22 @@
+@{
+    var version = "7.2.0";
+    var html = $"<a href=\"https://ext.net/download\">Ext.NET Classic {version}</a>";
+}
+<ext-container
+    region="West"
+    cls="sidebar"
+    width="240"
+    scrollable="true"
+    paddingAsString="20">
+    <layout>
+        <ext-vboxLayout align="Stretch" />
+    </layout>
+    <items>
+        <ext-container flex="1">
+            <content>
+                <partial name="_Navigation" />
+            </content>
+        </ext-container>
+        <ext-label cls="sidebar-footer" html=@html />
+    </items>
+</ext-container>
